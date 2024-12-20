@@ -17,13 +17,15 @@ class TestOneTimePad < Minitest::Test
     otp = OneTimePad.new
     assert_nil otp.secret
     assert_nil otp.pad
+    assert_equal OneTimePad::MAX_ROWS, otp.rows
   end
 
   def test_initialize_with_custom_values
     custom_pad = Array.new(OneTimePad::MAX_ROWS) { (32..126).to_a }
-    otp = OneTimePad.new(secret: @secret, otp: custom_pad)
+    otp        = OneTimePad.new(secret: @secret, otp: custom_pad)
     assert_equal @secret, otp.secret
     assert_equal custom_pad, otp.pad
+    assert_equal OneTimePad::MAX_ROWS, otp.rows
   end
 
   def test_kaos_generates_consistent_seed
@@ -69,6 +71,22 @@ class TestOneTimePad < Minitest::Test
     invalid_message = [0, 255, 127].pack('C*')
     decoded         = @otp.decode(message: invalid_message)
     assert_equal "___", decoded
+  end
+
+  def test_changing_rows_value
+    # Test that changing the rows value works as expected
+    custom_rows = 1024
+    @otp.rows   = custom_rows
+    @otp.generate_otp
+    
+    assert_equal custom_rows, @otp.pad.size
+    
+    message = "This is a test message."
+    encoded = @otp.code(message: message)
+    decoded = @otp.decode(message: encoded)
+    
+    assert_equal message, decoded
+    assert_equal custom_rows, @otp.pad.size
   end
 end
 

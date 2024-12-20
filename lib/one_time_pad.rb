@@ -15,7 +15,7 @@ class OneTimePad
   VERSION   = '1.0.0'
   MAX_ROWS  = 2048
 
-  attr_accessor :pad, :secret
+  attr_accessor :pad, :secret, :rows
 
   # Initialize a new OneTimePad instance
   #
@@ -28,6 +28,7 @@ class OneTimePad
     )
 
     @secret = secret
+    @rows   = MAX_ROWS
 
     if otp
       @pad = otp
@@ -46,13 +47,13 @@ class OneTimePad
 
   # Generates a pad of shuffled ASCII codes (32-126)
   #
-  # @return [Array<Array<Integer>>] A 2D array of MAX_ROWS rows,
+  # @return [Array<Array<Integer>>] A 2D array of @rows,
   #   each containing shuffled ASCII codes from 32-126
   def generate_otp
     srand(kaos) # seed the random generator
     ascii_codes = (32..126).to_a
     row_size    = ascii_codes.size
-    @pad = Array.new(MAX_ROWS) { ascii_codes.shuffle }
+    @pad = Array.new(@rows) { ascii_codes.shuffle }
   end
 
 
