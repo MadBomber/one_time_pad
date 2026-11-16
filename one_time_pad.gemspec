@@ -21,7 +21,7 @@ Gem::Specification.new do |spec|
 
   spec.homepage = "https://github.com/MadBomber/one_time_pad"
   spec.license  = "MIT"
-  spec.required_ruby_version = ">= 3.3"
+  spec.required_ruby_version = ">= 4.0"
 
   spec.metadata = {
     "allowed_push_host" => "https://rubygems.org",
